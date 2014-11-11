@@ -1,8 +1,10 @@
-*********************************
-*theHarvester 2.2a              *
-*Coded by Christian Martorella  *
-*cmartorella@edge-security.com  *
-*********************************
+Disclaimer
+-------------
+The harvester is a tool originally coded by Christian Martoerlla from Edge Security. This is not the original repo. The original repo lives in google code and you can get to it here:
+
+https://code.google.com/p/theharvester/
+
+I forked the version of the harvester from google code because I like github better than google code. There's no other reason other than that.
 
 What is this?
 -------------
@@ -84,6 +86,7 @@ Comments? Bugs? requests?
 ------------------------
 cmartorella@edge-security.com
 
+
 Updates:
 --------
 http://code.google.com/p/theharvester/
@@ -92,4 +95,3 @@ Thanks:
 -------
 John Matherly -  SHODAN project
 Lee Baird for suggestions and bugs reporting
-
