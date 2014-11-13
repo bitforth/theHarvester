@@ -1,28 +1,29 @@
 try:
-    from json       import dumps, loads
+    from json import dumps, loads
 except:
     from simplejson import dumps, loads
-from urllib2    import urlopen
-from urllib     import urlencode
+from urllib2 import urlopen
+from urllib import urlencode
 
 __all__ = ['WebAPI']
+
 
 class WebAPIError(Exception):
     def __init__(self, value):
         self.value = value
-    
+
     def __str__(self):
         return self.value
 
 
 class WebAPI:
     """Wrapper around the SHODAN webservices API"""
-    
+
     class DatalossDb:
-        
+
         def __init__(self, parent):
             self.parent = parent
-        
+
         def search(self, **kwargs):
             """Search the Dataloss DB archive.
     
@@ -48,12 +49,12 @@ class WebAPI:
     
             """
             return self.parent._request('datalossdb/search', dict(**kwargs))
-    
+
     class Exploits:
-        
+
         def __init__(self, parent):
             self.parent = parent
-            
+
         def search(self, query, sources=[], cve=None, osvdb=None, msb=None, bid=None):
             """Search the entire Shodan Exploits archive using the same query syntax
             as the website.
@@ -80,12 +81,12 @@ class WebAPI:
             if bid:
                 query += ' bid:%s' % (str(bid).strip())
             return self.parent._request('search_exploits', {'q': query})
-    
+
     class ExploitDb:
-        
+
         def __init__(self, parent):
             self.parent = parent
-        
+
         def download(self, id):
             """Download the exploit code from the ExploitDB archive.
     
@@ -100,7 +101,7 @@ class WebAPI:
     
             """
             return self.parent._request('exploitdb/download', {'id': id})
-        
+
         def search(self, query, **kwargs):
             """Search the ExploitDB archive.
     
@@ -127,12 +128,12 @@ class WebAPI:
     
             """
             return self.parent._request('exploitdb/search', dict(q=query, **kwargs))
-    
+
     class Msf:
-        
+
         def __init__(self, parent):
             self.parent = parent
-            
+
         def download(self, id):
             """Download a metasploit module given the fullname (id) of it.
             
@@ -146,12 +147,12 @@ class WebAPI:
             data            -- File content
             """
             return self.parent._request('msf/download', {'id': id})
-        
+
         def search(self, query, **kwargs):
             """Search for a Metasploit module.
             """
             return self.parent._request('msf/search', dict(q=query, **kwargs))
-    
+
     def __init__(self, key):
         """Initializes the API object.
         
@@ -165,7 +166,7 @@ class WebAPI:
         self.exploits = self.Exploits(self)
         self.exploitdb = self.ExploitDb(self)
         self.msf = self.Msf(self)
-    
+
     def _request(self, function, params):
         """General-purpose function to create web requests to SHODAN.
         
@@ -179,20 +180,20 @@ class WebAPI:
         """
         # Add the API key parameter automatically
         params['key'] = self.api_key
-        
+
         # Send the request
         data = urlopen(self.base_url + function + '?' + urlencode(params)).read()
-        
+
         # Parse the text into JSON
         data = loads(data)
-        
+
         # Raise an exception if an error occurred
         if data.get('error', None):
             raise WebAPIError(data['error'])
-        
+
         # Return the data
         return data
-    
+
     def fingerprint(self, banner):
         """Determine the software based on the banner.
         
@@ -203,7 +204,7 @@ class WebAPI:
         A list of software that matched the given banner.
         """
         return self._request('fingerprint', {'banner': banner})
-    
+
     def host(self, ip):
         """Get all available information on an IP.
 
@@ -216,7 +217,7 @@ class WebAPI:
 
         """
         return self._request('host', {'ip': ip})
-    
+
     def search(self, query):
         """Search the SHODAN database.
         

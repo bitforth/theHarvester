@@ -11,13 +11,15 @@
 
 __version__ = '2.3.1'
 
-import Type,Opcode,Status,Class
+import Type, Opcode, Status, Class
 from Base import DnsRequest, DNSError
 from Lib import DnsResult
 from Base import *
 from Lib import *
-Error=DNSError
+
+Error = DNSError
 from lazy import *
+
 Request = DnsRequest
 Result = DnsResult
 

@@ -28,74 +28,77 @@
 
 import re, math
 
+
 class BarGraph:
     """creates horizontal and vertical bar graphs, progress bars and faders"""
-    def __init__(self, type = ''):
-#----------------------------------------------------------------------------------------------------
-# Configuration
-#----------------------------------------------------------------------------------------------------
-        self.type = type and type or 'hBar'       # graph type: "hBar", "vBar", "pBar", or "fader"
-        self.values = []                          # graph data: list
 
-        self.graphBGColor = ''                    # graph background color: string
-        self.graphBorder = ''                     # graph border: string (CSS-spec: "size style color"; doesn't work with NN4)
-        self.graphPadding = 0                     # graph padding: integer (pixels)
+    def __init__(self, type=''):
+        # ----------------------------------------------------------------------------------------------------
+        # Configuration
+        #----------------------------------------------------------------------------------------------------
+        self.type = type and type or 'hBar'  # graph type: "hBar", "vBar", "pBar", or "fader"
+        self.values = []  # graph data: list
 
-        self.titles = []                          # titles: array or string with comma-separated values
-        self.titleColor = 'black'                 # title font color: string
-        self.titleBGColor = '#C0E0FF'             # title background color: string
-        self.titleBorder = '2px groove white'     # title border: string (CSS specification)
-        self.titleFont = 'Arial, Helvetica'       # title font family: string (CSS specification)
-        self.titleSize = 12                       # title font size: integer (pixels)
-        self.titleAlign = 'center'                # title text align: "left", "center", or "right"
-        self.titlePadding = 2                     # title padding: integer (pixels)
+        self.graphBGColor = ''  # graph background color: string
+        self.graphBorder = ''  # graph border: string (CSS-spec: "size style color"; doesn't work with NN4)
+        self.graphPadding = 0  # graph padding: integer (pixels)
 
-        self.labels = []                          # label names: list or string with comma-separated values
-        self.labelColor = 'black'                 # label font color: string
-        self.labelBGColor = '#C0E0FF'             # label background color: string
-        self.labelBorder = '2px groove white'     # label border: string (CSS-spec: "size style color"; doesn't work with NN4)
-        self.labelFont = 'Arial, Helvetica'       # label font family: string (CSS-spec)
-        self.labelSize = 12                       # label font size: integer (pixels)
-        self.labelAlign = 'center'                # label text align: "left", "center", or "right"
-        self.labelSpace = 0                       # additional space between labels: integer (pixels)
+        self.titles = []  # titles: array or string with comma-separated values
+        self.titleColor = 'black'  # title font color: string
+        self.titleBGColor = '#C0E0FF'  # title background color: string
+        self.titleBorder = '2px groove white'  # title border: string (CSS specification)
+        self.titleFont = 'Arial, Helvetica'  # title font family: string (CSS specification)
+        self.titleSize = 12  # title font size: integer (pixels)
+        self.titleAlign = 'center'  # title text align: "left", "center", or "right"
+        self.titlePadding = 2  # title padding: integer (pixels)
 
-        self.barWidth = 20                        # bar width: integer (pixels)
-        self.barLength = 1.0                      # bar length ratio: float (from 0.1 to 2.9)
-        self.barColors = []                       # bar colors OR bar images: list or string with comma-separated values
-        self.barBGColor = ''                      # bar background color: string
-        self.barBorder = '2px outset white'       # bar border: string (CSS-spec: "size style color"; doesn't work with NN4)
-        self.barLevelColors = []                  # bar level colors: ascending list (bLevel, bColor[,...]); draw bars >= bLevel with bColor
+        self.labels = []  # label names: list or string with comma-separated values
+        self.labelColor = 'black'  # label font color: string
+        self.labelBGColor = '#C0E0FF'  # label background color: string
+        self.labelBorder = '2px groove white'  # label border: string (CSS-spec: "size style color"; doesn't work with NN4)
+        self.labelFont = 'Arial, Helvetica'  # label font family: string (CSS-spec)
+        self.labelSize = 12  # label font size: integer (pixels)
+        self.labelAlign = 'center'  # label text align: "left", "center", or "right"
+        self.labelSpace = 0  # additional space between labels: integer (pixels)
 
-        self.showValues = 0                       # show values: 0 = % only, 1 = abs. and %, 2 = abs. only, 3 = none
-        self.baseValue = 0;                       # base value: integer or float (only hBar and vBar)
+        self.barWidth = 20  # bar width: integer (pixels)
+        self.barLength = 1.0  # bar length ratio: float (from 0.1 to 2.9)
+        self.barColors = []  # bar colors OR bar images: list or string with comma-separated values
+        self.barBGColor = ''  # bar background color: string
+        self.barBorder = '2px outset white'  # bar border: string (CSS-spec: "size style color"; doesn't work with NN4)
+        self.barLevelColors = []  # bar level colors: ascending list (bLevel, bColor[,...]); draw bars >= bLevel with bColor
 
-        self.absValuesColor = 'black'             # abs. values font color: string
-        self.absValuesBGColor = '#C0E0FF'         # abs. values background color: string
-        self.absValuesBorder = '2px groove white' # abs. values border: string (CSS-spec: "size style color"; doesn't work with NN4)
-        self.absValuesFont = 'Arial, Helvetica'   # abs. values font family: string (CSS-spec)
-        self.absValuesSize = 12                   # abs. values font size: integer (pixels)
-        self.absValuesPrefix = ''                 # abs. values prefix: string (e.g. "$")
-        self.absValuesSuffix = ''                 # abs. values suffix: string (e.g. " kg")
+        self.showValues = 0  # show values: 0 = % only, 1 = abs. and %, 2 = abs. only, 3 = none
+        self.baseValue = 0;  # base value: integer or float (only hBar and vBar)
 
-        self.percValuesColor = 'black'            # perc. values font color: string
+        self.absValuesColor = 'black'  # abs. values font color: string
+        self.absValuesBGColor = '#C0E0FF'  # abs. values background color: string
+        self.absValuesBorder = '2px groove white'  # abs. values border: string (CSS-spec: "size style color"; doesn't work with NN4)
+        self.absValuesFont = 'Arial, Helvetica'  # abs. values font family: string (CSS-spec)
+        self.absValuesSize = 12  # abs. values font size: integer (pixels)
+        self.absValuesPrefix = ''  # abs. values prefix: string (e.g. "$")
+        self.absValuesSuffix = ''  # abs. values suffix: string (e.g. " kg")
+
+        self.percValuesColor = 'black'  # perc. values font color: string
         self.percValuesFont = 'Arial, Helvetica'  # perc. values font family: string (CSS-spec)
-        self.percValuesSize = 12                  # perc. values font size: integer (pixels)
-        self.percValuesDecimals = 0               # perc. values number of decimals: integer
+        self.percValuesSize = 12  # perc. values font size: integer (pixels)
+        self.percValuesDecimals = 0  # perc. values number of decimals: integer
 
-        self.charts = 1                           # number of charts: integer
+        self.charts = 1  # number of charts: integer
 
         # hBar/vBar only:
-        self.legend = []                          # legend items: list or string with comma-separated values
-        self.legendColor = 'black'                # legend font color: string
-        self.legendBGColor = '#F0F0F0'            # legend background color: string
-        self.legendBorder = '2px groove white'    # legend border: string (CSS-spec: "size style color"; doesn't work with NN4)
-        self.legendFont = 'Arial, Helvetica'      # legend font family: string (CSS-spec)
-        self.legendSize = 12                      # legend font size: integer (pixels)
-        self.legendAlign = 'top'                  # legend vertical align: "top", "center", "bottom"
+        self.legend = []  # legend items: list or string with comma-separated values
+        self.legendColor = 'black'  # legend font color: string
+        self.legendBGColor = '#F0F0F0'  # legend background color: string
+        self.legendBorder = '2px groove white'  # legend border: string (CSS-spec: "size style color"; doesn't work with NN4)
+        self.legendFont = 'Arial, Helvetica'  # legend font family: string (CSS-spec)
+        self.legendSize = 12  # legend font size: integer (pixels)
+        self.legendAlign = 'top'  # legend vertical align: "top", "center", "bottom"
 
         # debug mode: 0 = off, 1 = on; just views some extra information
         self.debug = 0
-#----------------------------------------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------------------------------------
 
     # default bar colors; only used if barColors isn't set
     __colors = ('#0000FF', '#FF0000', '#00E000', '#A0A0FF', '#FFA0A0', '#00A000')
@@ -159,9 +162,10 @@ class BarGraph:
             for i in range(0, len(self.barLevelColors), 2):
                 try:
                     if (self.barLevelColors[i] > 0 and value >= self.barLevelColors[i]) or \
-                       (self.barLevelColors[i] < 0 and value <= self.barLevelColors[i]):
-                        color = self.barLevelColors[i+1]
-                except IndexError: pass
+                            (self.barLevelColors[i] < 0 and value <= self.barLevelColors[i]):
+                        color = self.barLevelColors[i + 1]
+                except IndexError:
+                    pass
         return color
 
     def build_bar(self, value, width, height, color):
@@ -185,7 +189,7 @@ class BarGraph:
         fader += '</tr></table>'
         return fader
 
-    def build_value(self, val, max_dec, sum = 0, align = ''):
+    def build_value(self, val, max_dec, sum=0, align=''):
         """return a single bar/fader value"""
         val = _number_format(val, max_dec)
         if sum: sum = _number_format(sum, max_dec)
@@ -206,9 +210,10 @@ class BarGraph:
         i = 0
 
         for color in barColors:
-            if len(self.legend) >= i+1:
+            if len(self.legend) >= i + 1:
                 text = hasattr(self.legend[i], 'strip') and self.legend[i].strip() or str(self.legend[i])
-            else: text = ''
+            else:
+                text = ''
             legend += '<tr>'
             legend += '<td>' + self.build_bar('', self.barWidth, self.barWidth, color) + '</td>'
             legend += '<td style="' + self.__cssLEGEND + '" nowrap>' + text + '</td>'
@@ -233,8 +238,10 @@ class BarGraph:
 
         if percent < 0:
             percent *= -1
-            bar += '<td style="' + self.__cssLABELBG + '" height=' + str(self.barWidth) + ' width=' + str(int(round((mPerc_neg - percent) * mul + valSpace))) + ' align=right nowrap>'
-            if self.showValues < 2: bar += '<span style="' + self.__cssPERCVALUES + '">' + str(_number_format(percent, self.percValuesDecimals)) + '%</span>'
+            bar += '<td style="' + self.__cssLABELBG + '" height=' + str(self.barWidth) + ' width=' + str(
+                int(round((mPerc_neg - percent) * mul + valSpace))) + ' align=right nowrap>'
+            if self.showValues < 2: bar += '<span style="' + self.__cssPERCVALUES + '">' + str(
+                _number_format(percent, self.percValuesDecimals)) + '%</span>'
             bar += '&nbsp;</td><td style="' + self.__cssLABELBG + '">'
             bar += self.build_bar(value, int(round(percent * mul)), self.barWidth, bColor)
             bar += '</td><td width=' + str(spacer) + '></td>'
@@ -246,8 +253,10 @@ class BarGraph:
                 bar += '<td>'
                 bar += self.build_bar(value, int(round(percent * mul)), self.barWidth, bColor)
                 bar += '</td>'
-            else: bar += '<td width=1 height=' + str(self.barWidth + (border * 2)) + '></td>'
-            bar += '<td style="' + self.__cssPERCVALUES + '" width=' + str(int(round((mPerc - percent) * mul + valSpace))) + ' align=left nowrap>'
+            else:
+                bar += '<td width=1 height=' + str(self.barWidth + (border * 2)) + '></td>'
+            bar += '<td style="' + self.__cssPERCVALUES + '" width=' + str(
+                int(round((mPerc - percent) * mul + valSpace))) + ' align=left nowrap>'
             if self.showValues < 2: bar += '&nbsp;' + str(_number_format(percent, self.percValuesDecimals)) + '%'
             bar += '&nbsp;</td>'
 
@@ -260,21 +269,26 @@ class BarGraph:
 
         if percent < 0:
             percent *= -1
-            bar += '<td height=' + str(spacer) + '></td></tr><tr align=center valign=top><td style="' + self.__cssLABELBG + '">'
+            bar += '<td height=' + str(
+                spacer) + '></td></tr><tr align=center valign=top><td style="' + self.__cssLABELBG + '">'
             bar += self.build_bar(value, self.barWidth, int(round(percent * mul)), bColor)
             bar += '</td></tr><tr align=center valign=top>'
-            bar += '<td style="' + self.__cssLABELBG + '" height=' + str(int(round((mPerc_neg - percent) * mul + valSpace))) + ' nowrap>'
-            bar += (self.showValues < 2) and '<span style="' + self.__cssPERCVALUES + '">' + str(_number_format(percent, self.percValuesDecimals)) + '%</span>' or '&nbsp;'
+            bar += '<td style="' + self.__cssLABELBG + '" height=' + str(
+                int(round((mPerc_neg - percent) * mul + valSpace))) + ' nowrap>'
+            bar += (self.showValues < 2) and '<span style="' + self.__cssPERCVALUES + '">' + str(
+                _number_format(percent, self.percValuesDecimals)) + '%</span>' or '&nbsp;'
             bar += '</td>'
         else:
-            bar += '<td style="' + self.__cssPERCVALUES + '" valign=bottom height=' + str(int(round((mPerc - percent) * mul + valSpace))) + ' nowrap>'
+            bar += '<td style="' + self.__cssPERCVALUES + '" valign=bottom height=' + str(
+                int(round((mPerc - percent) * mul + valSpace))) + ' nowrap>'
             if self.showValues < 2: bar += str(_number_format(percent, self.percValuesDecimals)) + '%'
             bar += '</td>'
             if percent:
                 bar += '</tr><tr align=center valign=bottom><td>'
                 bar += self.build_bar(value, self.barWidth, int(round(percent * mul)), bColor)
                 bar += '</td>'
-            else: bar += '</tr><tr><td width=' + str(self.barWidth + (border * 2)) + ' height=1></td>'
+            else:
+                bar += '</tr><tr><td width=' + str(self.barWidth + (border * 2)) + ' height=1></td>'
             if max_neg:
                 bar += '</tr><tr><td style="' + self.__cssLABELBG + '" height=' + str(spacer_neg) + '>'
                 bar += '<table border=0 cellspacing=0 cellpadding=0><tr><td></td></tr></table></td>'
@@ -291,8 +305,10 @@ class BarGraph:
         drc = hasattr(self.barColors, 'split') and self.barColors.split(',') or self.barColors
         val = []
         bc = []
-        if self.barLength < 0.1: self.barLength = 0.1
-        elif self.barLength > 2.9: self.barLength = 2.9
+        if self.barLength < 0.1:
+            self.barLength = 0.1
+        elif self.barLength > 2.9:
+            self.barLength = 2.9
         labels = (len(d) > len(r)) and len(d) or len(r)
 
         if self.type == 'pbar' or self.type == 'fader':
@@ -312,7 +328,8 @@ class BarGraph:
         if self.charts > 1:
             divide = math.ceil(labels / self.charts)
             graph += '<table border=0 cellspacing=0 cellpadding=6><tr valign=top><td>'
-        else: divide = 0
+        else:
+            divide = 0
 
         sum = 0
         max = 0
@@ -327,8 +344,10 @@ class BarGraph:
                 lcnt = 0
                 chart += 1
 
-            try: drv = len(d[i]) and [e for e in d[i]] or [d[i]]
-            except: drv = [d[i]]
+            try:
+                drv = len(d[i]) and [e for e in d[i]] or [d[i]]
+            except:
+                drv = [d[i]]
 
             j = 0
             dec = 0
@@ -345,8 +364,10 @@ class BarGraph:
 
                 if v != 0: v -= self.baseValue
 
-                if v > max: max = v
-                elif v < max_neg: max_neg = v
+                if v > max:
+                    max = v
+                elif v < max_neg:
+                    max_neg = v
 
                 if v < 0: v *= -1
                 sum += v
@@ -356,7 +377,8 @@ class BarGraph:
                     if len(drc) <= j or len(drc[j]) < 3:
                         bc.append(self.__colors[ccnt])
                         ccnt += 1
-                    else: bc.append(drc[j].strip())
+                    else:
+                        bc.append(drc[j].strip())
 
                 j += 1
 
@@ -364,15 +386,19 @@ class BarGraph:
 
         border = int(self.barBorder[0])
         mPerc = sum and int(round(max * 100.0 / sum)) or 0
-        if self.type == 'pbar' or self.type == 'fader': mul = 2
-        else: mul = mPerc and 100.0 / mPerc or 1
+        if self.type == 'pbar' or self.type == 'fader':
+            mul = 2
+        else:
+            mul = mPerc and 100.0 / mPerc or 1
         mul *= self.barLength
 
         if self.showValues < 2:
             if self.type == 'hbar':
                 valSpace = (self.percValuesDecimals * (self.percValuesSize / 1.6)) + (self.percValuesSize * 3.2)
-            else: valSpace = self.percValuesSize * 1.2
-        else: valSpace = self.percValuesSize
+            else:
+                valSpace = self.percValuesSize * 1.2
+        else:
+            valSpace = self.percValuesSize
         spacer = maxSize = int(round(mPerc * mul + valSpace + border * 2))
 
         if max_neg:
@@ -381,7 +407,8 @@ class BarGraph:
                 mul = 100.0 / mPerc_neg * self.barLength
             spacer_neg = int(round(mPerc_neg * mul + valSpace + border * 2))
             maxSize += spacer_neg
-        else: mPerc_neg = spacer_neg = 0
+        else:
+            mPerc_neg = spacer_neg = 0
 
         titleLabel = ''
         titleValue = ''
@@ -393,7 +420,8 @@ class BarGraph:
             if self.showValues == 1 or self.showValues == 2:
                 titleValue = (t[1] == '') and '&nbsp;' or t[1]
                 titleBar = (t[2] == '') and '&nbsp;' or t[2]
-            else: titleBar = (t[1] == '') and '&nbsp;' or t[1]
+            else:
+                titleBar = (t[1] == '') and '&nbsp;' or t[1]
 
         chart = 0
         lcnt = 0
@@ -407,7 +435,8 @@ class BarGraph:
                 for i in range(len(v)):
                     label = (lcnt < len(r)) and r[lcnt].strip() or str(lcnt + 1)
                     rowspan = len(v[i])
-                    graph += '<tr><td style="' + self.__cssLABEL + '"' + ((rowspan > 1) and ' rowspan=' + str(rowspan) or '') + '>'
+                    graph += '<tr><td style="' + self.__cssLABEL + '"' + (
+                    (rowspan > 1) and ' rowspan=' + str(rowspan) or '') + '>'
                     graph += '&nbsp;' + label + '&nbsp;</td>'
 
                     for j in range(len(v[i])):
@@ -419,12 +448,16 @@ class BarGraph:
                         if self.showValues == 1 or self.showValues == 2:
                             graph += self.build_value(v[i][j], max_dec, 0, 'right')
 
-                        graph += '<td' + (self.__cssBARBG and ' style="' + self.__cssBARBG + '"' or '') + ' height=100% width=' + str(maxSize) + '>'
-                        graph += self.create_hBar(value, percent, mPerc, mPerc_neg, max_neg, mul, valSpace, bColor, border, spacer, spacer_neg)
+                        graph += '<td' + (
+                        self.__cssBARBG and ' style="' + self.__cssBARBG + '"' or '') + ' height=100% width=' + str(
+                            maxSize) + '>'
+                        graph += self.create_hBar(value, percent, mPerc, mPerc_neg, max_neg, mul, valSpace, bColor,
+                                                  border, spacer, spacer_neg)
                         graph += '</td></tr>'
                         if j < len(v[i]) - 1: graph += '<tr>'
 
-                    if self.labelSpace and i < len(v)-1: graph += '<tr><td colspan=3 height=' + str(self.labelSpace) + '></td></tr>'
+                    if self.labelSpace and i < len(v) - 1: graph += '<tr><td colspan=3 height=' + str(
+                        self.labelSpace) + '></td></tr>'
                     lcnt += 1
 
             elif self.type == 'vbar':
@@ -442,7 +475,8 @@ class BarGraph:
                         bColor = self.level_color(v[i][j], bc[j])
 
                         graph += '<td' + (self.__cssBARBG and ' style="' + self.__cssBARBG + '"' or '') + '>'
-                        graph += self.create_vBar(value, percent, mPerc, mPerc_neg, max_neg, mul, valSpace, bColor, border, spacer, spacer_neg)
+                        graph += self.create_vBar(value, percent, mPerc, mPerc_neg, max_neg, mul, valSpace, bColor,
+                                                  border, spacer, spacer_neg)
                         graph += '</td>'
 
                     if self.labelSpace: graph += '<td width=' + str(self.labelSpace) + '></td>'
@@ -462,7 +496,8 @@ class BarGraph:
                 for i in range(len(v)):
                     label = (lcnt < len(r)) and r[lcnt].strip() or str(lcnt + 1)
                     colspan = len(v[i])
-                    graph += '<td style="' + self.__cssLABEL + '"' + ((colspan > 1) and ' colspan=' + str(colspan) or '') + '>'
+                    graph += '<td style="' + self.__cssLABEL + '"' + (
+                    (colspan > 1) and ' colspan=' + str(colspan) or '') + '>'
                     graph += '&nbsp;' + label + '&nbsp;</td>'
                     if self.labelSpace: graph += '<td width=' + str(self.labelSpace) + '></td>'
                     lcnt += 1
@@ -473,8 +508,10 @@ class BarGraph:
                 if len(t) > 0: graph += self.build_hTitle(titleLabel, titleValue, titleBar)
 
                 for i in range(len(v)):
-                    try: m = (len(v[i]) > 1) and True or False
-                    except: m = False
+                    try:
+                        m = (len(v[i]) > 1) and True or False
+                    except:
+                        m = False
 
                     if m or not i:
                         label = (lcnt < len(r)) and r[lcnt].strip() or str(i + 1)
@@ -484,8 +521,10 @@ class BarGraph:
                             graph += '<td style="' + self.__cssLABEL + '">'
                             graph += '&nbsp;' + label + '&nbsp;</td>'
 
-                        try: sum = v[i][1] and v[i][1] or v[-1][0]
-                        except: sum = v[-1][0]
+                        try:
+                            sum = v[i][1] and v[i][1] or v[-1][0]
+                        except:
+                            sum = v[-1][0]
 
                         percent = sum and v[i][0] * 100.0 / sum or 0
                         value = _number_format(v[i][0], max_dec)
@@ -495,24 +534,29 @@ class BarGraph:
 
                         graph += '<td' + (self.__cssBARBG and ' style="' + self.__cssBARBG + '"' or '') + '>'
 
-                        self.barColors = (len(drc) >= i+1) and drc[i].strip() or self.__colors[0]
+                        self.barColors = (len(drc) >= i + 1) and drc[i].strip() or self.__colors[0]
                         bColor = self.level_color(v[i][0], self.barColors)
                         graph += '<table border=0 cellspacing=0 cellpadding=0><tr><td>'
                         if self.type == 'fader':
-                            graph += self.build_fader(value, int(round(self.barWidth / 2)), self.barWidth, int(round(percent * mul)), bColor)
-                        else: graph += self.build_bar(value, int(round(percent * mul)), self.barWidth, bColor)
+                            graph += self.build_fader(value, int(round(self.barWidth / 2)), self.barWidth,
+                                                      int(round(percent * mul)), bColor)
+                        else:
+                            graph += self.build_bar(value, int(round(percent * mul)), self.barWidth, bColor)
                         graph += '</td><td width=' + str(int(round((100 - percent) * mul))) + '></td>'
                         graph += '</tr></table></td>'
-                        if self.showValues < 2: graph += '<td style="' + self.__cssPERCVALUES + '" nowrap>&nbsp;' + str(_number_format(percent, self.percValuesDecimals)) + '%</td>'
+                        if self.showValues < 2: graph += '<td style="' + self.__cssPERCVALUES + '" nowrap>&nbsp;' + str(
+                            _number_format(percent, self.percValuesDecimals)) + '%</td>'
                         graph += '</tr>'
-                        if self.labelSpace and i < len(v)-1: graph += '<td colspan=3 height=' + str(self.labelSpace) + '></td>'
+                        if self.labelSpace and i < len(v) - 1: graph += '<td colspan=3 height=' + str(
+                            self.labelSpace) + '></td>'
                         lcnt += 1
 
-            else: graph += '<tr><td>' + self.__err_type + '</td></tr>'
+            else:
+                graph += '<tr><td>' + self.__err_type + '</td></tr>'
 
             graph += '</table>'
 
-            if chart < self.charts - 1 and len(val[chart+1]):
+            if chart < self.charts - 1 and len(val[chart + 1]):
                 graph += '</td>'
                 if self.type == 'vbar': graph += '</tr><tr valign=top>'
                 graph += '<td>'
@@ -522,7 +566,8 @@ class BarGraph:
         if self.charts > 1: graph += '</td></tr></table>'
 
         if self.legend and self.type != 'pbar' and self.type != 'fader':
-            graph += '</td><td width=10>&nbsp;</td><td' + (self.legendAlign and ' valign=' + self.legendAlign or '') + '>'
+            graph += '</td><td width=10>&nbsp;</td><td' + (
+            self.legendAlign and ' valign=' + self.legendAlign or '') + '>'
             graph += self.build_legend(bc)
             graph += '</td></tr></table>'
 
@@ -533,10 +578,13 @@ class BarGraph:
         graph += '</td></tr></table>'
         return graph
 
+
 def _number_format(val, dec):
     """return float with dec decimals; if dec is 0, return integer"""
     return dec and ('%.' + str(dec) + 'f') % val or int(round(val))
 
+
 if __name__ == '__main__':
-    print __doc__
+    print
+    __doc__
 
