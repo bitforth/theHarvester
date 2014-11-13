@@ -17,7 +17,6 @@ class GoogleSearch:
         self.quantity = "100"
         self.limit = limit
         self.counter = offset
-        self.api_key = "AIzaSyBuBomy0n51Gb4836isK2Mp65UZI_DrrwQ"
 
     def do_search(self):
 
@@ -30,18 +29,6 @@ class GoogleSearch:
         res = h.getresponse()
         self.results = str(res.read())
         self.totalresults += self.results
-
-    def do_search_api(self):
-        h = http.client.HTTPSConnection(self.server_api)
-        h.putrequest('GET', "/customsearch/v1?key=" + self.api_key + "&start=" + str(
-            self.counter) + "&q=%40\"" + self.word + "\"")
-        h.putheader('Host', self.server_api)
-        h.putheader('User-agent', self.userAgent)
-        h.endheaders()
-        h.getresponse()
-        self.results = h.getfile().read()
-        self.totalresults += self.results
-        print(self.totalresults)
 
 
     def do_search_files(self, files):
