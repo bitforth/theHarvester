@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import string
-from socket import *
 import getopt
 import sys
 from discovery import *

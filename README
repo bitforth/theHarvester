@@ -4,7 +4,7 @@ The harvester is a tool originally coded by Christian Martoerlla from Edge Secur
 
 https://code.google.com/p/theharvester/
 
-I forked the version of the harvester from google code because I like github better than google code. There's no other reason other than that.
+I forked my own version theHarvester from google code because I needed to update the codebase so that it work within my environment, and adding new features.
 
 What is this?
 -------------
@@ -43,6 +43,11 @@ Active:
 Dependencies:
 ------------
 none
+
+Changelog 3:
+---------------
+-Updated code to use python 3 instead of python 2
+-Removed original banner because when running the harvester in bulk it takes too much space in my terminal
 
 Changelog 2.2a:
 ---------------
@@ -84,14 +89,16 @@ See TODO file.
 
 Comments? Bugs? requests?
 ------------------------
-cmartorella@edge-security.com
+alan@alanchavez.com (This repo's maintainer)
+cmartorella@edge-security.com (original creator)
 
 
-Updates:
+Original Repo Updates (theHarvester 2.2a):
 --------
 http://code.google.com/p/theharvester/
 
 Thanks:
 -------
+Christian Martorella - Creator
 John Matherly -  SHODAN project
 Lee Baird for suggestions and bugs reporting
