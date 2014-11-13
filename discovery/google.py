@@ -79,7 +79,6 @@ class GoogleSearch:
     def process(self):
         while self.counter <= self.limit and self.counter <= 1000:
             self.do_search()
-            # more = self.check_next()
             time.sleep(1)
             print("\tSearching " + str(self.counter) + " results...")
             self.counter += 100
