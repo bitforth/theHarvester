@@ -57,7 +57,7 @@ class GoogleSearch:
     def do_search_profiles(self):
         h = http.client.HTTPConnection(self.server)
         h.putrequest('GET', '/search?num=' + self.quantity + '&start=' + str(
-            self.counter) + '&hl=en&meta=&q=site:www.google.com%20intitle:"Google%20Profile"%20"Companies%20I%27ve%20worked%20for"%20"at%20' + self.word + '"')
+            self.counter) + '&hl=en&meta=&q=site:plus.google.com%20"' + self.word + '"')
         h.putheader('Host', self.hostname)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
