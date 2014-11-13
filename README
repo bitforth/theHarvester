@@ -48,6 +48,8 @@ Changelog 3:
 ---------------
 -Updated code to use python 3 instead of python 2
 -Removed original banner because when running the harvester in bulk it takes too much space in my terminal
+-Updated the google-profiles query to look specifically for Google+ profiles
+-Removed the customsearch endpoint, as this route has already been deprecated by Google and hitting it returns a 404 response
 
 Changelog 2.2a:
 ---------------
