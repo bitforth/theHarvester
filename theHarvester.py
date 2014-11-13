@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import string
 import getopt
 import sys
@@ -46,13 +44,14 @@ def start(argv):
     virtual = False
     limit = 100
     dnsserver = False
+    offset = 0
     for opt, arg in opts:
         if opt == '-l':
             limit = int(arg)
         elif opt == '-d':
             word = arg
         elif opt == '-s':
-            start = int(arg)
+            offset = int(arg)
         elif opt == '-v':
             virtual = "basic"
         elif opt == '-f':
@@ -78,19 +77,19 @@ def start(argv):
                 pass
     if engine == "google":
         print("[-] Searching in Google:")
-        search = googlesearch.search_google(word, limit, start)
+        search = GoogleSearch.SearchGoogle(word, limit, offset)
         search.process()
         all_emails = search.get_emails()
         all_hosts = search.get_hostnames()
     if engine == "exalead":
         print("[-] Searching in Exalead:")
-        search = exaleadsearch.search_exalead(word, limit, start)
+        search = exaleadsearch.search_exalead(word, limit, offset)
         search.process()
         all_emails = search.get_emails()
         all_hosts = search.get_hostnames()
     elif engine == "bing" or engine == "bingapi":
         print("[-] Searching in Bing:")
-        search = bingsearch.search_bing(word, limit, start)
+        search = bingsearch.search_bing(word, limit, offset)
         if engine == "bingapi":
             bingapi = "yes"
         else:
@@ -100,7 +99,7 @@ def start(argv):
         all_hosts = search.get_hostnames()
     elif engine == "yandex":  # Not working yet
         print("[-] Searching in Yandex:")
-        search = yandexsearch.search_yandex(word, limit, start)
+        search = yandexsearch.search_yandex(word, limit, offset)
         search.process()
         all_emails = search.get_emails()
         all_hosts = search.get_hostnames()
@@ -144,7 +143,7 @@ def start(argv):
         sys.exit()
     elif engine == "google-profiles":
         print("[-] Searching in Google profiles..")
-        search = googlesearch.search_google(word, limit, start)
+        search = googlesearch.search_google(word, limit, offset)
         search.process_profiles()
         people = search.get_profiles()
         print("Users from Google profiles:")
@@ -158,7 +157,7 @@ def start(argv):
         all_hosts = []
         virtual = "basic"
         print("[-] Searching in Google..")
-        search = googlesearch.search_google(word, limit, start)
+        search = googlesearch.search_google(word, limit, offset)
         search.process()
         emails = search.get_emails()
         hosts = search.get_hostnames()
@@ -173,14 +172,14 @@ def start(argv):
         all_emails.extend(emails)
         print("[-] Searching in Bing..")
         bingapi = "no"
-        search = bingsearch.search_bing(word, limit, start)
+        search = bingsearch.search_bing(word, limit, offset)
         search.process(bingapi)
         emails = search.get_emails()
         hosts = search.get_hostnames()
         all_hosts.extend(hosts)
         all_emails.extend(emails)
         print("[-] Searching in Exalead..")
-        search = exaleadsearch.search_exalead(word, limit, start)
+        search = exaleadsearch.search_exalead(word, limit, offset)
         search.process()
         emails = search.get_emails()
         hosts = search.get_hostnames()
@@ -268,7 +267,7 @@ def start(argv):
         print("[+] Virtual hosts:")
         print("==================")
         for l in host_ip:
-            search = bingsearch.search_bing(l, limit, start)
+            search = bingsearch.search_bing(l, limit, offset)
             search.process_vhost()
             res = search.get_allhostnames()
             for x in res:
@@ -302,9 +301,9 @@ def start(argv):
         pass
     recursion = None
     if recursion:
-        start = 0
+        offset = 0
         for word in vhost:
-            search = googlesearch.search_google(word, limit, start)
+            search = googlesearch.search_google(word, limit, offset)
             search.process()
             emails = search.get_emails()
             hosts = search.get_hostnames()
@@ -341,4 +340,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Search interrupted by user..")
         sys.exit()
-

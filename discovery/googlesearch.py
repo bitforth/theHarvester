@@ -5,7 +5,7 @@ import http.client
 
 
 class SearchGoogle:
-    def __init__(self, word, limit, start):
+    def __init__(self, word, limit, offset):
         self.word = word
         self.files = "pdf"
         self.results = ""
@@ -16,7 +16,7 @@ class SearchGoogle:
         self.userAgent = "(Mozilla/5.0 (Windows; U; Windows NT 6.0;en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6)"
         self.quantity = "100"
         self.limit = limit
-        self.counter = start
+        self.counter = offset
         self.api_key = "AIzaSyBuBomy0n51Gb4836isK2Mp65UZI_DrrwQ"
 
     def do_search(self):
@@ -27,8 +27,8 @@ class SearchGoogle:
         h.putheader('Host', self.hostname)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        returncode, returnmsg, headers = h.getreply()
-        self.results = h.getfile().read()
+        res = h.getresponse()
+        self.results = str(res.read())
         self.totalresults += self.results
 
     def do_search_api(self):
@@ -38,7 +38,7 @@ class SearchGoogle:
         h.putheader('Host', self.server_api)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        returncode, returnmsg, headers = h.getreply()
+        h.getresponse()
         self.results = h.getfile().read()
         self.totalresults += self.results
         print(self.totalresults)
