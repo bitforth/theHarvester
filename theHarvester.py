@@ -77,7 +77,7 @@ def start(argv):
                 pass
     if engine == "google":
         print("[-] Searching in Google:")
-        search = GoogleSearch.SearchGoogle(word, limit, offset)
+        search = google.GoogleSearch(word, limit, offset)
         search.process()
         all_emails = search.get_emails()
         all_hosts = search.get_hostnames()
@@ -89,7 +89,7 @@ def start(argv):
         all_hosts = search.get_hostnames()
     elif engine == "bing" or engine == "bingapi":
         print("[-] Searching in Bing:")
-        search = bingsearch.search_bing(word, limit, offset)
+        search = bing.BingSearch(word, limit, offset)
         if engine == "bingapi":
             bingapi = "yes"
         else:
@@ -143,7 +143,7 @@ def start(argv):
         sys.exit()
     elif engine == "google-profiles":
         print("[-] Searching in Google profiles..")
-        search = googlesearch.search_google(word, limit, offset)
+        search = google.GoogleSearch(word, limit, offset)
         search.process_profiles()
         people = search.get_profiles()
         print("Users from Google profiles:")
@@ -157,7 +157,7 @@ def start(argv):
         all_hosts = []
         virtual = "basic"
         print("[-] Searching in Google..")
-        search = googlesearch.search_google(word, limit, offset)
+        search = google.GoogleSearch(word, limit, offset)
         search.process()
         emails = search.get_emails()
         hosts = search.get_hostnames()
@@ -303,7 +303,7 @@ def start(argv):
     if recursion:
         offset = 0
         for word in vhost:
-            search = googlesearch.search_google(word, limit, offset)
+            search = google.GoogleSearch(word, limit, offset)
             search.process()
             emails = search.get_emails()
             hosts = search.get_hostnames()

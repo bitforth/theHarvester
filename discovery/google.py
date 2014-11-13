@@ -4,7 +4,7 @@ import time
 import http.client
 
 
-class SearchGoogle:
+class GoogleSearch:
     def __init__(self, word, limit, offset):
         self.word = word
         self.files = "pdf"

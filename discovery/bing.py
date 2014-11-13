@@ -4,8 +4,8 @@ import http.client
 import sys
 
 
-class SearchBing:
-    def __init__(self, word, limit, start):
+class BingSearch:
+    def __init__(self, word, limit, offset):
         self.word = word.replace(' ', '%20')
         self.results = ""
         self.totalresults = ""
@@ -16,18 +16,19 @@ class SearchBing:
         self.quantity = "50"
         self.limit = int(limit)
         self.bingApi = ""
-        self.counter = start
+        self.counter = offset
 
     def do_search(self):
         h = http.client.HTTPConnection(self.server)
+        print(self.server+"/search?q=%40" + self.word + "&count=50&first=" + str(self.counter))
         h.putrequest('GET', "/search?q=%40" + self.word + "&count=50&first=" + str(self.counter))
         h.putheader('Host', self.hostname)
         h.putheader('Cookie: SRCHHPGUSR=ADLT=DEMOTE&NRSLT=50')
         h.putheader('Accept-Language: en-us,en')
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        h.getreply()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
         self.totalresults += self.results
 
     def do_search_api(self):
@@ -38,8 +39,8 @@ class SearchBing:
         h.putheader('Host', "api.search.live.net")
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        h.getreply()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
         self.totalresults += self.results
 
     def do_search_vhost(self):
@@ -50,8 +51,8 @@ class SearchBing:
         h.putheader('Accept-Language: en-us,en')
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        h.getreply()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
         self.totalresults += self.results
 
     def get_emails(self):
@@ -69,7 +70,7 @@ class SearchBing:
     def process(self, api):
         if api == "yes":
             if self.bingApi == "":
-                print("Please insert your API key in the discovery/bingsearch.py")
+                print("Please insert your API key in the discovery/bing.py")
                 sys.exit()
         while self.counter < self.limit:
             if api == "yes":
