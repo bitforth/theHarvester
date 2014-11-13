@@ -97,12 +97,6 @@ class GoogleSearch:
             print("\tSearching " + str(self.counter) + " results...")
             self.counter += 100
 
-    def process_api(self):
-        while self.counter <= self.limit:
-            self.do_search_api()
-            print("\tSearching " + str(self.counter) + " results...")
-            self.counter += 100
-
     def process_files(self, files):
         while self.counter <= self.limit:
             self.do_search_files(files)
