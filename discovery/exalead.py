@@ -4,7 +4,7 @@ import re
 import time
 
 
-class SearchExaLead:
+class ExaLeadSearch:
     def __init__(self, word, limit, start):
         self.word = word
         self.files = "pdf"
@@ -24,8 +24,8 @@ class SearchExaLead:
         h.putheader('Referer', "http://" + self.hostname + "/search/web/results/?q=%40" + self.word)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        h.getreply()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
         self.totalresults += self.results
         print(self.results)
 
@@ -36,8 +36,8 @@ class SearchExaLead:
         h.putheader('Host', self.hostname)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        h.getreply()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
         self.totalresults += self.results
 
     def check_next(self):
@@ -62,13 +62,11 @@ class SearchExaLead:
         rawres = myparser.parser(self.totalresults, self.word)
         return rawres.fileurls(self.files)
 
-
     def process(self):
         while self.counter <= self.limit:
             self.do_search()
             self.counter += 50
             print("\tSearching " + str(self.counter) + " results...")
-
 
     def process_files(self, files):
         while self.counter < self.limit:

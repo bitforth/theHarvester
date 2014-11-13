@@ -11,12 +11,13 @@ class SearchPGP:
         self.userAgent = "(Mozilla/5.0 (Windows; U; Windows NT 6.0;en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6"
 
     def process(self):
-        h = http.client.HTTPSConnection(self.server)
+        h = http.client.HTTPConnection(self.server)
         h.putrequest('GET', "/pks/lookup?search=" + self.word + "&op=index")
         h.putheader('Host', self.hostname)
         h.putheader('User-agent', self.userAgent)
         h.endheaders()
-        self.results = h.getfile().read()
+        response = h.getresponse()
+        self.results = str(response.read())
 
 
     def get_emails(self):

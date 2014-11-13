@@ -79,23 +79,13 @@ class parser:
             self.temp2.append(y)
         return self.temp2
 
-    def people_jigsaw(self):
-        res = []
-        # reg_people = re.compile("'tblrow' title='[a-zA-Z0-9.-]*'><span class='nowrap'/>")
-        reg_people = re.compile("href=javascript:showContact\('[0-9]*'\)>[a-zA-Z0-9., ]*</a></span>")
-        self.temp = reg_people.findall(self.results)
-        for x in self.temp:
-            a = x.split('>')[1].replace("</a", "")
-            res.append(a)
-        return res
-
 
     def profiles(self):
         reg_people = re.compile('">[a-zA-Z0-9._ -]* - <em>Google Profile</em>')
         self.temp = reg_people.findall(self.results)
         resul = []
         for x in self.temp:
-            y = str.replace(x, ' <em>Google Profile</em>', '')
+            y = str.replace(x, 'Google+', '')
             y = str.replace(y, '-', '')
             y = str.replace(y, '">', '')
             if y != " ":

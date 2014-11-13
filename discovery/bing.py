@@ -20,7 +20,6 @@ class BingSearch:
 
     def do_search(self):
         h = http.client.HTTPConnection(self.server)
-        print(self.server+"/search?q=%40" + self.word + "&count=50&first=" + str(self.counter))
         h.putrequest('GET', "/search?q=%40" + self.word + "&count=50&first=" + str(self.counter))
         h.putheader('Host', self.hostname)
         h.putheader('Cookie: SRCHHPGUSR=ADLT=DEMOTE&NRSLT=50')

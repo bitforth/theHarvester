@@ -50,7 +50,7 @@ Changelog 3:
 -Removed original banner because when running the harvester in bulk it takes too much space in my terminal
 -Updated the google-profiles query to look specifically for Google+ profiles
 -Removed the customsearch endpoint, as this route has already been deprecated by Google and hitting it returns a 404 response
-
+-Removed jigsaw from the list of providers as jigsaw is now data.com and it requires an API to use this provider. The endpoint was no longer working. 
 Changelog 2.2a:
 ---------------
 -Fixed Linkedin parser (thanks Alton Johnson and Francesco Stillavato)

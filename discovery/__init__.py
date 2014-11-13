@@ -1,2 +1,2 @@
-__all__ = ["bing", "google", "pgpsearch", "linkedinsearch", "exaleadsearch", "yandexsearch",
+__all__ = ["bing", "google", "pgp", "linkedinsearch", "exalead", "yandexsearch",
            "dnssearch", "shodansearch", "people123"]
