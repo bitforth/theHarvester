@@ -1,4 +1,3 @@
-from shodan import WebAPI
 import sys
 
 
